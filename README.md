@@ -18,3 +18,4 @@ https://aadebdeb.github.io/Sample_WebGL_EnvironmentMapping/latlong
     * http://www.hdrlabs.com/sibl/archive.html
 * Cube map images are created in below site.
     * https://github.com/matheowis/HDRI-to-CubeMap
+* Images are licensed by [CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/)
