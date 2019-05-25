@@ -2,9 +2,15 @@
 
 ## Cube Mapping
 
+https://aadebdeb.github.io/Sample_WebGL_EnvironmentMapping/cubemap.html
+
 ## Dynamic Cube Mapping
 
+https://aadebdeb.github.io/Sample_WebGL_EnvironmentMapping/dynamic_cubemap.html
+
 ## Latitude-Longitude Mapping
+
+https://aadebdeb.github.io/Sample_WebGL_EnvironmentMapping/latlong
 
 ---
 
