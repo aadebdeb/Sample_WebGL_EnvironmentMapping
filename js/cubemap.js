@@ -39,8 +39,22 @@ out vec4 o_color;
 
 uniform samplerCube u_skyboxTexture;
 
+#define HALF_PI 1.57079632679
+
+mat2 rotate(float r) {
+  float c = cos(r);
+  float s = sin(r);
+  return  mat2(c, s, -s, c);
+}
+
+vec4 sampleCubemap(samplerCube cubemap, vec3 v) {
+  v.xz *= rotate(HALF_PI);
+  v.x *= -1.0;
+  return texture(cubemap, v);
+}
+
 void main(void) {
-  vec3 skybox = texture(u_skyboxTexture, v_dir).rgb;
+  vec3 skybox = sampleCubemap(u_skyboxTexture, v_dir).rgb;
   o_color = vec4(skybox, 1.0);
 }
 `;
@@ -85,6 +99,20 @@ uniform float u_metallic;
 uniform float u_diffIntensity;
 uniform float u_specIntensity;
 
+#define HALF_PI 1.57079632679
+
+mat2 rotate(float r) {
+  float c = cos(r);
+  float s = sin(r);
+  return  mat2(c, s, -s, c);
+}
+
+vec4 sampleCubemapLod(samplerCube cubemap, vec3 v, float lod) {
+  v.xz *= rotate(HALF_PI);
+  v.x *= -1.0;
+  return textureLod(cubemap, v, lod);
+}
+
 vec3 fresnelSchlick(vec3 f90, float cosine) {
   return f90 + (1.0 - f90) * pow(1.0 - cosine, 5.0);
 }
@@ -98,8 +126,8 @@ void main(void) {
   vec3 diffColor = mix(vec3(0.0), u_albedo, 1.0 - u_metallic);
   vec3 specColor = mix(vec3(0.04), u_albedo, u_metallic);
 
-  vec3 skyboxDiff = u_diffIntensity * textureLod(u_skyboxTexture, normal, u_maxLodLevel).rgb;
-  vec3 skyboxSpec = u_specIntensity * textureLod(u_skyboxTexture, reflectDir, log2(u_roughness * pow(2.0, u_maxLodLevel))).rgb;
+  vec3 skyboxDiff = u_diffIntensity * sampleCubemapLod(u_skyboxTexture, normal, u_maxLodLevel).rgb;
+  vec3 skyboxSpec = u_specIntensity * sampleCubemapLod(u_skyboxTexture, reflectDir, log2(u_roughness * pow(2.0, u_maxLodLevel))).rgb;
 
   vec3 color = skyboxDiff * diffColor + fresnelSchlick(specColor, dotNR) * skyboxSpec;
   o_color = vec4(color, 1.0);
